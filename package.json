@@ -2,9 +2,10 @@
     "name": "toggle-css",
     "version": "0.1.0",
     "description": "Browser extension to quickly toggle CSS",
-    "main": "src/index.js",
+    "main": "src/background.js",
     "scripts": {
         "fmt": "js-beautify -nr manifest.json; find ./src -type f -name '*.js' -exec js-beautify -nr {} \\;",
+        "lint": "npm run fmt; web-ext lint",
         "test": "web-ext run"
     },
     "repository": {

@@ -8,5 +8,24 @@
     "icons": {
         "48": "assets/css-enabled.svg",
         "96": "assets/css-enabled.svg"
+    },
+
+    "browser_action": {
+        "default_icon": {
+            "48": "assets/css-enabled.svg",
+            "96": "assets/css-enabled.svg"
+        },
+        "default_title": "Toggle CSS"
+    },
+
+    "content_scripts": [{
+        "matches": ["<all_urls>"],
+        "js": ["src/toggle-css.js"]
+    }],
+
+    "background": {
+        "scripts": [
+            "src/background.js"
+        ]
     }
 }
