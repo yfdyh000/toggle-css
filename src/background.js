@@ -130,3 +130,10 @@ browser.tabs.onUpdated.addListener((tabId, changeInfo) => {
     console.log('Updated tab: ' + tabId);
     console.log('Disabled tab IDs: [' + disabledTabIds.join(', ') + ']');
 });
+
+browser.windows.onFocusChanged.addListener((windowId) => {
+    updateIcon();
+
+    console.log('Changed focus to window' + windowId);
+    console.log('Disabled tab IDs: [' + disabledTabIds.join(', ') + ']');
+})
