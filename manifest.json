@@ -1,0 +1,12 @@
+{
+    "manifest_version": 2,
+    "name": "toggle-css",
+    "version": "0.1.0",
+
+    "description": "Browser extension to quickly toggle CSS.",
+
+    "icons": {
+        "48": "assets/css-enabled.svg",
+        "96": "assets/css-enabled.svg"
+    }
+}

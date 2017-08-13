@@ -1,0 +1,25 @@
+{
+    "name": "toggle-css",
+    "version": "0.1.0",
+    "description": "Browser extension to quickly toggle CSS",
+    "main": "src/index.js",
+    "scripts": {
+        "fmt": "find ./src -type f -name '*.js' -exec js-beautify -nr {} \\;",
+        "test": "web-ext run"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+ssh://git@github.com/quailiff/toggle-css.git"
+    },
+    "keywords": [
+        "Browser",
+        "extension",
+        "CSS"
+    ],
+    "author": "Jonathan Kim <quailiff@gmail.com>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/quailiff/toggle-css/issues"
+    },
+    "homepage": "https://github.com/quailiff/toggle-css#readme"
+}
