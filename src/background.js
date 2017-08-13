@@ -2,15 +2,17 @@ var disabledTabIds = [];
 
 function updateIcon(activeTabId) {
     var iconPath;
-    if (!activeTabId || disabledTabIds.includes(activeTabId)) {
+    if (disabledTabIds.includes(activeTabId)) {
         iconPath = {
-            16: "assets/css-disabled.svg",
-            32: "assets/css-disabled.svg"
+            "16": "assets/css-disabled.svg",
+            "32": "assets/css-disabled.svg",
+            "64": "assets/css-disabled.svg"
         };
     } else {
         iconPath = {
-            16: "assets/css-enabled.svg",
-            32: "assets/css-enabled.svg"
+            "16": "assets/css-enabled.svg",
+            "32": "assets/css-enabled.svg",
+            "64": "assets/css-enabled.svg"
         };
     }
 
