@@ -15,8 +15,7 @@ function updateIcon(activeTabId) {
     }
 
     browser.browserAction.setIcon({
-        path: iconPath,
-        tabId: activeTabId
+        path: iconPath
     });
 }
 
@@ -54,8 +53,13 @@ function toggleCss(activeTab) {
 
     // Tell the content script to enable/disable CSS
     browser.tabs.sendMessage(activeTab.id, {
-        disableCss
-    });
+            disableCss
+        })
+        .catch(() => {
+            // Disabling the CSS can fail if the tab is not on a webpage
+            // Ignore the error - when the tab loads a webpage, disable the
+            // CSS at that time
+        });
 }
 
 browser.browserAction.onClicked.addListener((activeTab) => {
@@ -92,8 +96,13 @@ browser.tabs.onUpdated.addListener((tabId, changeInfo) => {
     if (changeInfo.status === 'complete') {
         if (tabCssIsDisabled(tabId)) {
             browser.tabs.sendMessage(tabId, {
-                disableCss: true
-            });
+                    disableCss: true
+                })
+                .catch(() => {
+                    // Disabling the CSS can fail if the tab is not on a webpage
+                    // Ignore the error - when the tab loads a webpage, disable the
+                    // CSS at that time
+                });
         }
     }
 
