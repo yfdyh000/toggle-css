@@ -1,6 +1,7 @@
 var disabledTabIds = [];
 
 function updateIcon(activeTabId) {
+    var iconTitle;
     var iconPath;
     if (disabledTabIds.includes(activeTabId)) {
         iconPath = {
@@ -8,16 +9,21 @@ function updateIcon(activeTabId) {
             "32": "assets/css-disabled.svg",
             "64": "assets/css-disabled.svg"
         };
+        iconTitle = "Click to enable CSS";
     } else {
         iconPath = {
             "16": "assets/css-enabled.svg",
             "32": "assets/css-enabled.svg",
             "64": "assets/css-enabled.svg"
         };
+        iconTitle = "Click to disable CSS";
     }
 
     browser.browserAction.setIcon({
         path: iconPath
+    });
+    browser.browserAction.setTitle({
+        title: iconTitle
     });
 }
 

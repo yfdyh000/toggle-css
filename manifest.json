@@ -17,7 +17,7 @@
             "32": "assets/css-enabled.svg",
             "64": "assets/css-enabled.svg"
         },
-        "default_title": "Toggle CSS"
+        "default_title": "Click to disable CSS"
     },
 
     "content_scripts": [{
