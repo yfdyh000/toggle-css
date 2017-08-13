@@ -6,7 +6,9 @@ function toggleCss() {
         .then((tabs) => {
             tabs.forEach((tab) => {
                 // Need to tell the tab whether to enable or disable CSS
-                browser.tabs.sendMessage(tab.id, {});
+                browser.tabs.sendMessage(tab.id, {
+                    disableCss: true
+                });
             });
         });
 }
