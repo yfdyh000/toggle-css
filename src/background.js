@@ -36,12 +36,6 @@ function setTabCssDisabled(tabId, disabled) {
     updateIcon(tabId);
 }
 
-function handleTabUpdate(tabId) {
-    // TODO: Reset tab state if URL changed
-    // setTabCssDisabled(tabId, false);
-    updateIcon(tabId);
-}
-
 function toggleCss(activeTab) {
     if (!activeTab.id) {
         return;
@@ -62,9 +56,26 @@ function toggleCss(activeTab) {
 
 browser.browserAction.onClicked.addListener(toggleCss);
 
-browser.tabs.onRemoved.addListener(resetTabState);
+browser.tabs.onActivated.addListener((activeInfo) => {
+    updateIcon(activeInfo.tabId);
+});
 
-browser.tabs.onActivated.addListener(updateIcon);
-browser.tabs.onReplaced.addListener(updateIcon);
+browser.tabs.onRemoved.addListener((tabId) => {
+    setTabCssDisabled(tabId, false);
+});
 
-browser.tabs.onUpdated.addListener(handleTabUpdate);
+browser.tabs.onReplaced.addListener((tabId) => {
+    setTabCssDisabled(tabId, false);
+});
+
+browser.tabs.onUpdated.addListener((tabId, changeInfo) => {
+    // If the tab finished loading and CSS is supposed to be disabled, tell the
+    // tab to disable CSS
+    if (changeInfo.status === 'complete') {
+        if (tabCssIsDisabled(tabId)) {
+            browser.tabs.sendMessage(tabId, {
+                disableCss: true
+            });
+        }
+    }
+});
