@@ -1,30 +1,42 @@
 var disabledTabIds = [];
 
-function updateIcon(activeTabId) {
-    var iconTitle;
-    var iconPath;
-    if (disabledTabIds.includes(activeTabId)) {
-        iconPath = {
-            "16": "assets/css-disabled.svg",
-            "32": "assets/css-disabled.svg",
-            "64": "assets/css-disabled.svg"
-        };
-        iconTitle = "Click to enable CSS";
-    } else {
-        iconPath = {
-            "16": "assets/css-enabled.svg",
-            "32": "assets/css-enabled.svg",
-            "64": "assets/css-enabled.svg"
-        };
-        iconTitle = "Click to disable CSS";
-    }
+function updateIcon() {
+    browser.tabs.query({
+            active: true,
+            currentWindow: true
+        })
+        .then((tabs) => {
+            tabs.forEach((tab) => {
+                var iconTitle;
+                var iconPath;
+                if (disabledTabIds.includes(tab.id)) {
+                    iconPath = {
+                        "16": "assets/css-disabled.svg",
+                        "32": "assets/css-disabled.svg",
+                        "64": "assets/css-disabled.svg"
+                    };
+                    iconTitle = "Click to enable CSS";
+                } else {
+                    iconPath = {
+                        "16": "assets/css-enabled.svg",
+                        "32": "assets/css-enabled.svg",
+                        "64": "assets/css-enabled.svg"
+                    };
+                    iconTitle = "Click to disable CSS";
+                }
 
-    browser.browserAction.setIcon({
-        path: iconPath
-    });
-    browser.browserAction.setTitle({
-        title: iconTitle
-    });
+                browser.browserAction.setIcon({
+                    path: iconPath
+                });
+                browser.browserAction.setTitle({
+                    title: iconTitle,
+                    tabId: tab.id
+                });
+            });
+        })
+        .catch(() => {
+            // Ignore
+        });
 }
 
 function tabCssIsDisabled(tabId) {
@@ -44,7 +56,7 @@ function setTabCssDisabled(tabId, disabled) {
             idx = disabledTabIds.indexOf(tabId);
         }
     }
-    updateIcon(tabId);
+    updateIcon();
 }
 
 function toggleCss(activeTab) {
@@ -78,7 +90,7 @@ browser.browserAction.onClicked.addListener((activeTab) => {
 });
 
 browser.tabs.onActivated.addListener((activeInfo) => {
-    updateIcon(activeInfo.tabId);
+    updateIcon();
 
     console.log('Activated tab: ' + activeInfo.tabId);
     console.log('Disabled tab IDs: [' + disabledTabIds.join(', ') + ']');
@@ -114,6 +126,7 @@ browser.tabs.onUpdated.addListener((tabId, changeInfo) => {
         }
     }
 
+    updateIcon();
     console.log('Updated tab: ' + tabId);
     console.log('Disabled tab IDs: [' + disabledTabIds.join(', ') + ']');
 });
