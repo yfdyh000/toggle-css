@@ -26,7 +26,8 @@ function updateIcon() {
                 }
 
                 browser.browserAction.setIcon({
-                    path: iconPath
+                    path: iconPath,
+                    tabId: tab.id
                 });
                 browser.browserAction.setTitle({
                     title: iconTitle,
