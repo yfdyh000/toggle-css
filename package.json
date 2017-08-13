@@ -4,7 +4,7 @@
     "description": "Browser extension to quickly toggle CSS",
     "main": "src/index.js",
     "scripts": {
-        "fmt": "find ./src -type f -name '*.js' -exec js-beautify -nr {} \\;",
+        "fmt": "js-beautify -nr manifest.json; find ./src -type f -name '*.js' -exec js-beautify -nr {} \\;",
         "test": "web-ext run"
     },
     "repository": {
