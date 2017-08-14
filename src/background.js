@@ -1,43 +1,39 @@
-var disabledTabIds = [];
+let disabledTabIds = [];
 
-function updateIcon() {
-    browser.tabs.query({
-            active: true,
-            currentWindow: true
-        })
-        .then((tabs) => {
-            tabs.forEach((tab) => {
-                var iconTitle;
-                var iconPath;
-                if (disabledTabIds.includes(tab.id)) {
-                    iconPath = {
-                        "16": "assets/css-disabled.svg",
-                        "32": "assets/css-disabled.svg",
-                        "64": "assets/css-disabled.svg"
-                    };
-                    iconTitle = "Click to enable CSS";
-                } else {
-                    iconPath = {
-                        "16": "assets/css-enabled.svg",
-                        "32": "assets/css-enabled.svg",
-                        "64": "assets/css-enabled.svg"
-                    };
-                    iconTitle = "Click to disable CSS";
-                }
+async function updateIcon() {
+    const disabledSVGPath = "assets/css-disabled.svg"
+    const enabledSVGPath = "assets/css-enabled.svg"
 
-                browser.browserAction.setIcon({
-                    path: iconPath,
-                    tabId: tab.id
-                });
-                browser.browserAction.setTitle({
-                    title: iconTitle,
-                    tabId: tab.id
-                });
-            });
-        })
-        .catch(() => {
-            // Ignore
-        });
+    const currentTab = (await browser.tabs.query({
+        active: true,
+        currentWindow: true
+    }))[0];
+    let iconTitle;
+    let iconPath;
+    if (disabledTabIds.includes(currentTab.id)) {
+        iconPath = {
+            "16": disabledSVGPath,
+            "32": disabledSVGPath,
+            "64": disabledSVGPath
+        };
+        iconTitle = "Click to enable CSS";
+    } else {
+        iconPath = {
+            "16": enabledSVGPath,
+            "32": enabledSVGPath,
+            "64": enabledSVGPath
+        };
+        iconTitle = "Click to disable CSS";
+    }
+
+    browser.browserAction.setIcon({
+        path: iconPath,
+        tabId: currentTab.id
+    });
+    browser.browserAction.setTitle({
+        title: iconTitle,
+        tabId: currentTab.id
+    });
 }
 
 function tabCssIsDisabled(tabId) {
@@ -50,7 +46,7 @@ function setTabCssDisabled(tabId, disabled) {
             disabledTabIds.push(tabId);
         }
     } else {
-        var idx = disabledTabIds.indexOf(tabId);
+        let idx = disabledTabIds.indexOf(tabId);
 
         while (idx !== -1) {
             disabledTabIds.splice(idx, 1);
@@ -65,12 +61,8 @@ function toggleCss(activeTab) {
         return;
     }
 
-    var disableCss = !tabCssIsDisabled(activeTab.id);
-    if (disableCss) {
-        setTabCssDisabled(activeTab.id, true);
-    } else {
-        setTabCssDisabled(activeTab.id, false);
-    }
+    let disableCss = !tabCssIsDisabled(activeTab.id);
+    setTabCssDisabled(activeTab.id, disableCss);
 
     // Tell the content script to enable/disable CSS
     browser.tabs.sendMessage(activeTab.id, {
@@ -86,29 +78,29 @@ function toggleCss(activeTab) {
 browser.browserAction.onClicked.addListener((activeTab) => {
     toggleCss(activeTab);
 
-    console.log('Button clicked for tab: ' + activeTab.id);
-    console.log('Disabled tab IDs: [' + disabledTabIds.join(', ') + ']');
+    console.log(`Button clicked for tab: ${activeTab.id}`);
+    console.log(`Disabled tab IDs: [${disabledTabIds.join(', ')}]`);
 });
 
 browser.tabs.onActivated.addListener((activeInfo) => {
     updateIcon();
 
-    console.log('Activated tab: ' + activeInfo.tabId);
-    console.log('Disabled tab IDs: [' + disabledTabIds.join(', ') + ']');
+    console.log(`Activated tab: ${activeInfo.tabId}`);
+    console.log(`Disabled tab IDs: [${disabledTabIds.join(', ')}]`);
 });
 
 browser.tabs.onRemoved.addListener((tabId) => {
     setTabCssDisabled(tabId, false);
 
-    console.log('Removed tab: ' + tabId);
-    console.log('Disabled tab IDs: [' + disabledTabIds.join(', ') + ']');
+    console.log(`Removed tab: ${tabId}`);
+    console.log(`Disabled tab IDs: [${disabledTabIds.join(', ')}]`);
 });
 
 browser.tabs.onReplaced.addListener((tabId) => {
     setTabCssDisabled(tabId, false);
 
-    console.log('Replaced tab: ' + tabId);
-    console.log('Disabled tab IDs: [' + disabledTabIds.join(', ') + ']');
+    console.log(`Replaced tab: ${tabId}`);
+    console.log(`Disabled tab IDs: [${disabledTabIds.join(', ')}]`);
 });
 
 browser.tabs.onUpdated.addListener((tabId, changeInfo) => {
@@ -128,13 +120,13 @@ browser.tabs.onUpdated.addListener((tabId, changeInfo) => {
     }
 
     updateIcon();
-    console.log('Updated tab: ' + tabId);
-    console.log('Disabled tab IDs: [' + disabledTabIds.join(', ') + ']');
+    console.log(`Updated tab: ${tabId}`);
+    console.log(`Disabled tab IDs: [${disabledTabIds.join(', ')}]`);
 });
 
 browser.windows.onFocusChanged.addListener((windowId) => {
     updateIcon();
 
-    console.log('Changed focus to window' + windowId);
-    console.log('Disabled tab IDs: [' + disabledTabIds.join(', ') + ']');
+    console.log(`Changed focus to window: ${windowId}`);
+    console.log(`Disabled tab IDs: [${disabledTabIds.join(', ')}]`);
 })
