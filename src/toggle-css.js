@@ -1,5 +1,6 @@
 function toggleCss(request) {
-    for (let s of document.styleSheets) {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const s of document.styleSheets) {
         s.disabled = request.disableCss;
     }
 }

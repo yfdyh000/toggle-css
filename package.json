@@ -1,11 +1,13 @@
 {
     "name": "toggle-css",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "Browser extension to quickly toggle CSS",
     "main": "src/background.js",
     "scripts": {
-        "fmt": "js-beautify -nr manifest.json; find ./src -type f -name '*.js' -exec js-beautify -nr {} \\;",
-        "lint": "npm run fmt; web-ext lint",
+        "fmt": "js-beautify -nr manifest.json package.json; find ./src -type f -name '*.js' -exec js-beautify -nr {} \\;",
+        "lint": "npm run fmt; npm run lint-eslint; npm run lint-web-ext",
+        "lint-eslint": "find ./src -type f -name '*.js' -exec eslint {} \\;",
+        "lint-web-ext": "web-ext lint",
         "test": "web-ext run"
     },
     "repository": {
@@ -22,5 +24,11 @@
     "bugs": {
         "url": "https://github.com/quailiff/toggle-css/issues"
     },
-    "homepage": "https://github.com/quailiff/toggle-css#readme"
+    "homepage": "https://github.com/quailiff/toggle-css#readme",
+    "devDependencies": {
+        "eslint": "^4.4.1",
+        "eslint-config-airbnb-base": "^11.3.1",
+        "eslint-plugin-import": "^2.7.0",
+        "js-beautify": "^1.6.14"
+    }
 }
